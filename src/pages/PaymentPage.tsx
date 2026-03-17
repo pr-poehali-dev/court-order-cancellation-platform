@@ -39,22 +39,22 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
   const [agreed, setAgreed] = useState(false);
 
   const selected = plans.find(p => p.id === plan);
-  const inp = "w-full rounded-xl border border-grey-200 bg-grey-50 px-4 py-3 font-ibm text-sm placeholder:text-grey-500 focus:outline-none focus:border-blue focus:bg-white transition-all";
-  const lbl = "block font-ibm text-xs font-medium text-grey-500 uppercase tracking-wider mb-1.5";
+  const inp = "w-full rounded-xl border border-grey-200 bg-grey-50 px-4 py-3 font-onest text-sm placeholder:text-grey-500 focus:outline-none focus:border-blue focus:bg-white transition-all";
+  const lbl = "block font-onest text-xs font-medium text-grey-500 uppercase tracking-wider mb-1.5";
 
   return (
     <div className="pt-16 min-h-screen bg-background">
       <div className="bg-white border-b border-grey-200">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <div className="section-chip mb-3">Оплата</div>
-          <h1 className="font-cormorant font-bold text-grey-900 text-3xl md:text-4xl">Тарифы и оплата</h1>
+          <h1 className="font-syne font-bold text-grey-900 text-3xl md:text-4xl">Тарифы и оплата</h1>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Plans */}
         <div className="mb-12">
-          <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-6">Выберите тариф</h2>
+          <h2 className="font-syne font-bold text-grey-900 text-2xl mb-6">Выберите тариф</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {plans.map(p => (
               <button
@@ -65,26 +65,26 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
                 }`}
               >
                 {p.popular && (
-                  <div className="absolute -top-3 left-6 bg-gold text-grey-900 font-ibm text-xs font-semibold px-3 py-1 rounded-full">
+                  <div className="absolute -top-3 left-6 bg-gold text-grey-900 font-onest text-xs font-semibold px-3 py-1 rounded-full">
                     Популярный
                   </div>
                 )}
                 <div className="flex items-center justify-between mb-4">
-                  <span className="font-ibm font-semibold text-grey-900">{p.name}</span>
+                  <span className="font-onest font-semibold text-grey-900">{p.name}</span>
                   <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
                     plan === p.id ? 'border-blue' : 'border-grey-200'
                   }`}>
                     {plan === p.id && <div className="w-2.5 h-2.5 rounded-full bg-blue" />}
                   </div>
                 </div>
-                <div className="font-cormorant font-bold text-grey-900 text-4xl mb-5">
-                  {p.price.toLocaleString('ru')} <span className="text-xl font-ibm font-normal text-grey-500">₽</span>
+                <div className="font-syne font-bold text-grey-900 text-4xl mb-5">
+                  {p.price.toLocaleString('ru')} <span className="text-xl font-onest font-normal text-grey-500">₽</span>
                 </div>
                 <ul className="space-y-2">
                   {p.features.map((f, i) => (
                     <li key={i} className="flex items-center gap-2">
                       <Icon name="Check" size={14} className="text-blue flex-shrink-0" />
-                      <span className="font-ibm text-sm text-grey-500">{f}</span>
+                      <span className="font-onest text-sm text-grey-500">{f}</span>
                     </li>
                   ))}
                 </ul>
@@ -96,7 +96,7 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form */}
           <div className="lg:col-span-2 bg-white rounded-2xl shadow-card p-8">
-            <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-6">Способ оплаты</h2>
+            <h2 className="font-syne font-bold text-grey-900 text-2xl mb-6">Способ оплаты</h2>
 
             <div className="grid grid-cols-3 gap-3 mb-8">
               {methods.map(m => (
@@ -108,8 +108,8 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
                   }`}
                 >
                   <Icon name={m.icon} fallback="CreditCard" size={22} className={`mx-auto mb-1.5 ${method === m.id ? 'text-blue' : 'text-grey-500'}`} />
-                  <div className={`font-ibm text-xs font-semibold ${method === m.id ? 'text-blue' : 'text-grey-900'}`}>{m.label}</div>
-                  <div className="font-ibm text-xs text-grey-500 mt-0.5">{m.desc}</div>
+                  <div className={`font-onest text-xs font-semibold ${method === m.id ? 'text-blue' : 'text-grey-900'}`}>{m.label}</div>
+                  <div className="font-onest text-xs text-grey-500 mt-0.5">{m.desc}</div>
                 </button>
               ))}
             </div>
@@ -140,7 +140,7 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
             {method !== 'card' && (
               <div className="p-8 bg-grey-50 rounded-xl text-center">
                 <Icon name={method === 'sbp' ? 'QrCode' : 'ExternalLink'} fallback="Info" size={28} className="text-grey-500 mx-auto mb-3" />
-                <p className="font-ibm text-sm text-grey-500">
+                <p className="font-onest text-sm text-grey-500">
                   {method === 'yookassa'
                     ? 'После нажатия «Оплатить» вы будете перенаправлены на страницу ЮKassa.'
                     : 'После нажатия «Оплатить» вам будет показан QR-код для оплаты через СБП.'}
@@ -157,7 +157,7 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
               >
                 {agreed && <Icon name="Check" size={11} className="text-white" />}
               </button>
-              <span className="font-ibm text-sm text-grey-500">
+              <span className="font-onest text-sm text-grey-500">
                 Я принимаю{' '}
                 <button onClick={() => onNavigate('terms')} className="text-blue underline">условия использования</button>
                 {' '}и согласен с обработкой персональных данных
@@ -168,32 +168,32 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
           {/* Summary */}
           <div>
             <div className="bg-white rounded-2xl shadow-card p-6 sticky top-24">
-              <h3 className="font-cormorant font-bold text-grey-900 text-xl mb-5">Итог</h3>
+              <h3 className="font-syne font-bold text-grey-900 text-xl mb-5">Итог</h3>
               <div className="space-y-3 mb-5">
                 <div className="flex justify-between">
-                  <span className="font-ibm text-sm text-grey-500">Тариф</span>
-                  <span className="font-ibm text-sm font-medium text-grey-900">{selected?.name}</span>
+                  <span className="font-onest text-sm text-grey-500">Тариф</span>
+                  <span className="font-onest text-sm font-medium text-grey-900">{selected?.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="font-ibm text-sm text-grey-500">Стоимость</span>
-                  <span className="font-ibm text-sm text-grey-900">{selected?.price.toLocaleString('ru')} ₽</span>
+                  <span className="font-onest text-sm text-grey-500">Стоимость</span>
+                  <span className="font-onest text-sm text-grey-900">{selected?.price.toLocaleString('ru')} ₽</span>
                 </div>
               </div>
               <div className="border-t border-grey-200 pt-4 mb-6 flex justify-between items-center">
-                <span className="font-ibm font-semibold text-grey-900">Итого</span>
-                <span className="font-cormorant font-bold text-grey-900 text-3xl">{selected?.price.toLocaleString('ru')} ₽</span>
+                <span className="font-onest font-semibold text-grey-900">Итого</span>
+                <span className="font-syne font-bold text-grey-900 text-3xl">{selected?.price.toLocaleString('ru')} ₽</span>
               </div>
 
               <button
                 disabled={!agreed}
-                className="w-full py-3.5 rounded-full bg-blue text-white font-ibm font-medium shadow-blue hover:bg-blue-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-3.5 rounded-full bg-blue text-white font-onest font-medium shadow-blue hover:bg-blue-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <Icon name="Lock" size={16} />
                 Оплатить
               </button>
               <div className="flex items-center justify-center gap-2 mt-4">
                 <Icon name="ShieldCheck" size={13} className="text-grey-500" />
-                <span className="font-ibm text-xs text-grey-500">Безопасная оплата</span>
+                <span className="font-onest text-xs text-grey-500">Безопасная оплата</span>
               </div>
             </div>
           </div>

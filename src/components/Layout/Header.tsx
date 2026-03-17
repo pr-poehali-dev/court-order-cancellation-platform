@@ -24,7 +24,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
           <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center shadow-blue">
             <Icon name="Scale" size={16} className="text-white" />
           </div>
-          <span className="font-cormorant font-bold text-grey-900 text-xl leading-none">ЮрДок</span>
+          <span className="font-syne font-bold text-grey-900 text-xl leading-none">ЮрДок</span>
         </button>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -32,7 +32,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`px-3.5 py-2 rounded-full font-ibm text-sm transition-all ${
+              className={`px-3.5 py-2 rounded-full font-onest text-sm transition-all ${
                 currentPage === item.id
                   ? 'bg-blue-50 text-blue font-medium'
                   : 'text-grey-500 hover:text-grey-900 hover:bg-grey-100'
@@ -46,7 +46,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
         <div className="hidden md:flex items-center gap-2">
           <button
             onClick={() => onNavigate('cabinet')}
-            className={`px-3.5 py-2 rounded-full font-ibm text-sm transition-all ${
+            className={`px-3.5 py-2 rounded-full font-onest text-sm transition-all ${
               currentPage === 'cabinet'
                 ? 'bg-blue-50 text-blue font-medium'
                 : 'text-grey-500 hover:text-grey-900 hover:bg-grey-100'
@@ -56,7 +56,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
           </button>
           <button
             onClick={() => onNavigate('constructor')}
-            className="px-4 py-2 rounded-full bg-blue text-white font-ibm text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
+            className="px-4 py-2 rounded-full bg-blue text-white font-onest text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
           >
             Создать заявление
           </button>
@@ -77,7 +77,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
               <button
                 key={item.id}
                 onClick={() => { onNavigate(item.id); setMobileOpen(false); }}
-                className={`text-left px-4 py-2.5 rounded-xl font-ibm text-sm transition-colors ${
+                className={`text-left px-4 py-2.5 rounded-xl font-onest text-sm transition-colors ${
                   currentPage === item.id
                     ? 'bg-blue-50 text-blue font-medium'
                     : 'text-grey-500 hover:bg-grey-100 hover:text-grey-900'
@@ -88,7 +88,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             ))}
             <button
               onClick={() => { onNavigate('constructor'); setMobileOpen(false); }}
-              className="mt-2 px-4 py-2.5 rounded-xl bg-blue text-white font-ibm text-sm font-medium text-center"
+              className="mt-2 px-4 py-2.5 rounded-xl bg-blue text-white font-onest text-sm font-medium text-center"
             >
               Создать заявление
             </button>

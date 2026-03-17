@@ -15,15 +15,15 @@ export default function TermsPage() {
       <div className="bg-white border-b border-grey-200">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="section-chip mb-3">Правовые документы</div>
-          <h1 className="font-cormorant font-bold text-grey-900 text-3xl md:text-4xl">Условия использования</h1>
-          <p className="font-ibm text-grey-500 text-sm mt-2">Редакция от 1 января 2024 г.</p>
+          <h1 className="font-syne font-bold text-grey-900 text-3xl md:text-4xl">Условия использования</h1>
+          <p className="font-onest text-grey-500 text-sm mt-2">Редакция от 1 января 2024 г.</p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="bg-gold-50 border border-gold/20 rounded-2xl p-5 mb-10 flex gap-3">
           <span className="text-gold text-lg flex-shrink-0">⚠️</span>
-          <p className="font-ibm text-sm text-grey-800">
+          <p className="font-onest text-sm text-grey-800">
             <strong>Важно:</strong> Сервис создаёт шаблоны юридических документов. Это не является юридической консультацией. При сложных ситуациях обратитесь к квалифицированному юристу.
           </p>
         </div>
@@ -31,15 +31,15 @@ export default function TermsPage() {
         <div className="space-y-4">
           {sections.map((s, i) => (
             <div key={i} className="bg-white rounded-2xl shadow-card p-7">
-              <h2 className="font-cormorant font-bold text-grey-900 text-xl mb-4">{s.title}</h2>
+              <h2 className="font-syne font-bold text-grey-900 text-xl mb-4">{s.title}</h2>
               {s.content.split('\n\n').map((p, j) => (
-                <p key={j} className="font-ibm text-sm text-grey-500 leading-relaxed mb-3 last:mb-0">{p}</p>
+                <p key={j} className="font-onest text-sm text-grey-500 leading-relaxed mb-3 last:mb-0">{p}</p>
               ))}
             </div>
           ))}
         </div>
 
-        <p className="font-ibm text-xs text-grey-500 text-center mt-8">
+        <p className="font-onest text-xs text-grey-500 text-center mt-8">
           По вопросам: <a href="mailto:legal@prikazotmena.ru" className="text-blue hover:underline">legal@prikazotmena.ru</a>
         </p>
       </div>

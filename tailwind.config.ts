@@ -17,8 +17,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        cormorant: ["Cormorant", "serif"],
-        ibm: ["IBM Plex Sans", "sans-serif"],
+        syne:  ["Syne", "sans-serif"],
+        onest: ["Onest", "sans-serif"],
       },
       borderRadius: {
         sm:   "calc(var(--radius) - 8px)",

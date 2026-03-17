@@ -30,12 +30,12 @@ export default function CabinetPage({ onNavigate }: CabinetPageProps) {
           <div className="flex items-center justify-between">
             <div>
               <div className="section-chip mb-3">Личный кабинет</div>
-              <h1 className="font-cormorant font-bold text-grey-900 text-3xl">Иванов Иван Иванович</h1>
-              <p className="font-ibm text-grey-500 text-sm mt-1">ivan.ivanov@mail.ru</p>
+              <h1 className="font-syne font-bold text-grey-900 text-3xl">Иванов Иван Иванович</h1>
+              <p className="font-onest text-grey-500 text-sm mt-1">ivan.ivanov@mail.ru</p>
             </div>
             <button
               onClick={() => onNavigate('constructor')}
-              className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue text-white font-ibm text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
+              className="hidden md:flex items-center gap-2 px-5 py-2.5 rounded-full bg-blue text-white font-onest text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
             >
               <Icon name="Plus" size={16} />
               Новое заявление
@@ -51,7 +51,7 @@ export default function CabinetPage({ onNavigate }: CabinetPageProps) {
               <button
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-ibm text-sm transition-all ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full font-onest text-sm transition-all ${
                   tab === t.id ? 'bg-blue-50 text-blue font-medium' : 'text-grey-500 hover:bg-grey-100 hover:text-grey-900'
                 }`}
               >
@@ -68,10 +68,10 @@ export default function CabinetPage({ onNavigate }: CabinetPageProps) {
         {tab === 'documents' && (
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="font-cormorant font-bold text-grey-900 text-2xl">Мои заявления</h2>
+              <h2 className="font-syne font-bold text-grey-900 text-2xl">Мои заявления</h2>
               <button
                 onClick={() => onNavigate('constructor')}
-                className="md:hidden flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue text-white font-ibm text-sm font-medium"
+                className="md:hidden flex items-center gap-1.5 px-4 py-2 rounded-full bg-blue text-white font-onest text-sm font-medium"
               >
                 <Icon name="Plus" size={15} />Создать
               </button>
@@ -87,22 +87,22 @@ export default function CabinetPage({ onNavigate }: CabinetPageProps) {
                       </div>
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <span className="font-ibm font-semibold text-grey-900 text-sm">{doc.title}</span>
-                          <span className={`font-ibm text-xs px-2.5 py-0.5 rounded-full ${statusCfg[doc.status].cls}`}>
+                          <span className="font-onest font-semibold text-grey-900 text-sm">{doc.title}</span>
+                          <span className={`font-onest text-xs px-2.5 py-0.5 rounded-full ${statusCfg[doc.status].cls}`}>
                             {statusCfg[doc.status].label}
                           </span>
                         </div>
-                        <p className="font-ibm text-xs text-grey-500 truncate">{doc.court}</p>
+                        <p className="font-onest text-xs text-grey-500 truncate">{doc.court}</p>
                         <div className="flex flex-wrap gap-3 mt-1">
-                          <span className="font-ibm text-xs text-grey-500">Взыскатель: <span className="text-grey-800">{doc.creditor}</span></span>
-                          <span className="font-ibm text-xs text-grey-500">Сумма: <span className="text-grey-800">{doc.amount}</span></span>
-                          <span className="font-ibm text-xs text-grey-500">{doc.date}</span>
+                          <span className="font-onest text-xs text-grey-500">Взыскатель: <span className="text-grey-800">{doc.creditor}</span></span>
+                          <span className="font-onest text-xs text-grey-500">Сумма: <span className="text-grey-800">{doc.amount}</span></span>
+                          <span className="font-onest text-xs text-grey-500">{doc.date}</span>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
                       {doc.status === 'ready' && (
-                        <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-blue text-blue font-ibm text-xs font-medium hover:bg-blue hover:text-white transition-all">
+                        <button className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-blue text-blue font-onest text-xs font-medium hover:bg-blue hover:text-white transition-all">
                           <Icon name="Download" size={13} />
                           Скачать PDF
                         </button>
@@ -120,7 +120,7 @@ export default function CabinetPage({ onNavigate }: CabinetPageProps) {
 
         {tab === 'profile' && (
           <div className="max-w-xl">
-            <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-6">Мои данные</h2>
+            <h2 className="font-syne font-bold text-grey-900 text-2xl mb-6">Мои данные</h2>
             <div className="bg-white rounded-2xl shadow-card p-6 space-y-5">
               {[
                 { label: 'ФИО', value: 'Иванов Иван Иванович' },
@@ -131,10 +131,10 @@ export default function CabinetPage({ onNavigate }: CabinetPageProps) {
               ].map(item => (
                 <div key={item.label} className="flex justify-between items-center border-b border-grey-200 pb-5 last:border-0 last:pb-0">
                   <div>
-                    <div className="font-ibm text-xs text-grey-500 uppercase tracking-wider mb-0.5">{item.label}</div>
-                    <div className="font-ibm text-sm text-grey-900">{item.value}</div>
+                    <div className="font-onest text-xs text-grey-500 uppercase tracking-wider mb-0.5">{item.label}</div>
+                    <div className="font-onest text-sm text-grey-900">{item.value}</div>
                   </div>
-                  <button className="font-ibm text-xs text-blue hover:underline">Изменить</button>
+                  <button className="font-onest text-xs text-blue hover:underline">Изменить</button>
                 </div>
               ))}
             </div>
@@ -154,11 +154,11 @@ export default function CabinetPage({ onNavigate }: CabinetPageProps) {
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="font-ibm font-semibold text-sm text-grey-900">{n.title}</span>
+                    <span className="font-onest font-semibold text-sm text-grey-900">{n.title}</span>
                     {!n.read && <div className="w-2 h-2 rounded-full bg-blue" />}
                   </div>
-                  <p className="font-ibm text-sm text-grey-500">{n.text}</p>
-                  <p className="font-ibm text-xs text-grey-500/60 mt-1.5">{n.time}</p>
+                  <p className="font-onest text-sm text-grey-500">{n.text}</p>
+                  <p className="font-onest text-xs text-grey-500/60 mt-1.5">{n.time}</p>
                 </div>
               </div>
             ))}

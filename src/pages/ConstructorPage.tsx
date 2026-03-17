@@ -74,8 +74,8 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
     }
   };
 
-  const inp = "w-full rounded-xl border border-grey-200 bg-grey-50 px-4 py-3 font-ibm text-sm text-foreground placeholder:text-grey-500 focus:outline-none focus:border-blue focus:bg-white transition-all";
-  const lbl = "block font-ibm text-xs font-medium text-grey-500 uppercase tracking-wider mb-1.5";
+  const inp = "w-full rounded-xl border border-grey-200 bg-grey-50 px-4 py-3 font-onest text-sm text-foreground placeholder:text-grey-500 focus:outline-none focus:border-blue focus:bg-white transition-all";
+  const lbl = "block font-onest text-xs font-medium text-grey-500 uppercase tracking-wider mb-1.5";
 
   return (
     <div className="pt-16 min-h-screen bg-background">
@@ -83,7 +83,7 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
       <div className="bg-white border-b border-grey-200">
         <div className="max-w-4xl mx-auto px-6 py-8">
           <div className="section-chip mb-3">Конструктор</div>
-          <h1 className="font-cormorant font-bold text-grey-900 text-3xl md:text-4xl">
+          <h1 className="font-syne font-bold text-grey-900 text-3xl md:text-4xl">
             Заявление об отмене судебного приказа
           </h1>
         </div>
@@ -105,14 +105,14 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
                     : 'border-transparent text-grey-200 cursor-default'
                 }`}
               >
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-ibm font-semibold flex-shrink-0 transition-all ${
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-onest font-semibold flex-shrink-0 transition-all ${
                   i < stepIndex ? 'bg-blue text-white'
                     : s.id === step ? 'bg-blue-50 text-blue'
                     : 'bg-grey-100 text-grey-500'
                 }`}>
                   {i < stepIndex ? <Icon name="Check" size={12} /> : i + 1}
                 </div>
-                <span className="font-ibm text-sm hidden sm:block">{s.label}</span>
+                <span className="font-onest text-sm hidden sm:block">{s.label}</span>
               </button>
             ))}
           </div>
@@ -124,8 +124,8 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
 
           {step === 'court' && (
             <div>
-              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Данные суда</h2>
-              <p className="font-ibm text-grey-500 text-sm mb-8">Укажите суд, который вынес судебный приказ</p>
+              <h2 className="font-syne font-bold text-grey-900 text-2xl mb-1">Данные суда</h2>
+              <p className="font-onest text-grey-500 text-sm mb-8">Укажите суд, который вынес судебный приказ</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
                   <label className={lbl}>Наименование суда *</label>
@@ -145,8 +145,8 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
 
           {step === 'claimant' && (
             <div>
-              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Данные заявителя</h2>
-              <p className="font-ibm text-grey-500 text-sm mb-8">Ваши персональные данные для заявления</p>
+              <h2 className="font-syne font-bold text-grey-900 text-2xl mb-1">Данные заявителя</h2>
+              <p className="font-onest text-grey-500 text-sm mb-8">Ваши персональные данные для заявления</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
                   <label className={lbl}>ФИО полностью *</label>
@@ -174,8 +174,8 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
 
           {step === 'order' && (
             <div>
-              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Данные судебного приказа</h2>
-              <p className="font-ibm text-grey-500 text-sm mb-8">Заполните из текста судебного приказа</p>
+              <h2 className="font-syne font-bold text-grey-900 text-2xl mb-1">Данные судебного приказа</h2>
+              <p className="font-onest text-grey-500 text-sm mb-8">Заполните из текста судебного приказа</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
                   <label className={lbl}>Номер приказа *</label>
@@ -203,8 +203,8 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
 
           {step === 'grounds' && (
             <div>
-              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Основания для отмены</h2>
-              <p className="font-ibm text-grey-500 text-sm mb-8">Укажите причину отмены судебного приказа</p>
+              <h2 className="font-syne font-bold text-grey-900 text-2xl mb-1">Основания для отмены</h2>
+              <p className="font-onest text-grey-500 text-sm mb-8">Укажите причину отмены судебного приказа</p>
               <div className="space-y-2.5 mb-6">
                 {GROUNDS.map(g => (
                   <label
@@ -221,7 +221,7 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
                       {form.groundsType === g.value && <div className="w-2.5 h-2.5 rounded-full bg-blue" />}
                     </div>
                     <input type="radio" className="sr-only" value={g.value} checked={form.groundsType === g.value} onChange={() => upd('groundsType', g.value)} />
-                    <span className="font-ibm text-sm text-grey-900">{g.label}</span>
+                    <span className="font-onest text-sm text-grey-900">{g.label}</span>
                   </label>
                 ))}
               </div>
@@ -239,8 +239,8 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
 
           {step === 'preview' && (
             <div>
-              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Проверьте данные</h2>
-              <p className="font-ibm text-grey-500 text-sm mb-8">Убедитесь в правильности данных перед оплатой</p>
+              <h2 className="font-syne font-bold text-grey-900 text-2xl mb-1">Проверьте данные</h2>
+              <p className="font-onest text-grey-500 text-sm mb-8">Убедитесь в правильности данных перед оплатой</p>
 
               <div className="space-y-4">
                 {[
@@ -250,12 +250,12 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
                   { title: 'Основания', items: [['Причина', GROUNDS.find(g => g.value === form.groundsType)?.label || '—'], ['Детали', form.groundsDetails]] },
                 ].map((sec, i) => (
                   <div key={i} className="bg-grey-50 rounded-xl p-5">
-                    <div className="font-ibm font-semibold text-grey-900 text-sm mb-3">{sec.title}</div>
+                    <div className="font-onest font-semibold text-grey-900 text-sm mb-3">{sec.title}</div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {sec.items.filter(([, v]) => v).map(([k, v]) => (
                         <div key={k}>
-                          <div className="font-ibm text-xs text-grey-500 uppercase tracking-wider">{k}</div>
-                          <div className="font-ibm text-sm text-grey-900 mt-0.5">{v}</div>
+                          <div className="font-onest text-xs text-grey-500 uppercase tracking-wider">{k}</div>
+                          <div className="font-onest text-sm text-grey-900 mt-0.5">{v}</div>
                         </div>
                       ))}
                     </div>
@@ -267,13 +267,13 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
               <div className="mt-6 bg-white rounded-2xl border border-grey-200 p-6">
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
                   <div>
-                    <div className="font-ibm font-semibold text-grey-900 text-sm mb-1">Предварительный просмотр</div>
-                    <p className="font-ibm text-sm text-grey-500">Скачайте черновик заявления в PDF для проверки</p>
+                    <div className="font-onest font-semibold text-grey-900 text-sm mb-1">Предварительный просмотр</div>
+                    <p className="font-onest text-sm text-grey-500">Скачайте черновик заявления в PDF для проверки</p>
                   </div>
                   <button
                     onClick={downloadPdf}
                     disabled={pdfLoading}
-                    className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-grey-200 text-grey-800 font-ibm text-sm font-medium hover:border-blue hover:text-blue transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-grey-200 text-grey-800 font-onest text-sm font-medium hover:border-blue hover:text-blue transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                   >
                     {pdfLoading
                       ? <><Icon name="Loader" size={16} className="animate-spin" />Генерация...</>
@@ -282,18 +282,18 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
                   </button>
                 </div>
                 {pdfError && (
-                  <div className="mt-3 p-3 bg-red-50 rounded-xl text-red-600 font-ibm text-xs">{pdfError}</div>
+                  <div className="mt-3 p-3 bg-red-50 rounded-xl text-red-600 font-onest text-xs">{pdfError}</div>
                 )}
               </div>
 
               <div className="mt-4 bg-blue rounded-2xl p-5 flex items-center justify-between">
                 <div>
-                  <div className="font-ibm text-xs text-white/70 uppercase tracking-wider">Стоимость полного тарифа</div>
-                  <div className="font-cormorant font-bold text-white text-4xl mt-1">499 <span className="text-2xl">₽</span></div>
+                  <div className="font-onest text-xs text-white/70 uppercase tracking-wider">Стоимость полного тарифа</div>
+                  <div className="font-syne font-bold text-white text-4xl mt-1">499 <span className="text-2xl">₽</span></div>
                 </div>
                 <button
                   onClick={() => onNavigate('payment')}
-                  className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-gold text-grey-900 font-ibm font-semibold hover:bg-gold-light transition-colors"
+                  className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-gold text-grey-900 font-onest font-semibold hover:bg-gold-light transition-colors"
                 >
                   <Icon name="CreditCard" size={18} />
                   Перейти к оплате
@@ -307,7 +307,7 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
             <button
               onClick={prev}
               disabled={stepIndex === 0}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full font-ibm text-sm text-grey-500 hover:bg-grey-100 hover:text-grey-900 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full font-onest text-sm text-grey-500 hover:bg-grey-100 hover:text-grey-900 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <Icon name="ArrowLeft" size={16} />
               Назад
@@ -327,7 +327,7 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
             {step !== 'preview' && (
               <button
                 onClick={next}
-                className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-blue text-white font-ibm text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
+                className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-blue text-white font-onest text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
               >
                 Далее
                 <Icon name="ArrowRight" size={16} />

@@ -70,7 +70,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: "IBM Plex Sans", sans-serif;
+    font-family: "Onest", sans-serif;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
   }
@@ -79,16 +79,16 @@
   h2,
   h3,
   h4 {
-    font-family: "Cormorant", serif;
+    font-family: "Syne", sans-serif;
   }
 }
 
 @layer utilities {
-  .font-cormorant {
-    font-family: "Cormorant", serif;
+  .font-syne {
+    font-family: "Syne", sans-serif;
   }
-  .font-ibm {
-    font-family: "IBM Plex Sans", sans-serif;
+  .font-onest {
+    font-family: "Onest", sans-serif;
   }
 
   .text-blue {

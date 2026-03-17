@@ -39,27 +39,27 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               Юридический сервис
             </div>
 
-            <h1 className="font-cormorant font-bold text-grey-900 text-5xl md:text-6xl lg:text-[72px] leading-[1.05] mb-6">
+            <h1 className="font-syne font-bold text-grey-900 text-5xl md:text-6xl lg:text-[72px] leading-[1.05] mb-6">
               Отмените судебный<br />
               приказ{' '}
               <span className="text-blue italic">онлайн</span>
             </h1>
 
-            <p className="font-ibm text-grey-500 text-lg leading-relaxed mb-10 max-w-md">
+            <p className="font-onest text-grey-500 text-lg leading-relaxed mb-10 max-w-md">
               Заполните форму, оплатите и получите готовое заявление. Без юристов и очередей — документ за 10 минут.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => onNavigate('constructor')}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-blue text-white font-ibm font-medium shadow-blue hover:bg-blue-dark transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-blue text-white font-onest font-medium shadow-blue hover:bg-blue-dark transition-colors"
               >
                 <Icon name="FileText" size={18} />
                 Создать заявление
               </button>
               <button
                 onClick={() => onNavigate('faq')}
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white border border-grey-200 text-grey-800 font-ibm font-medium hover:border-grey-500 transition-colors shadow-card"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white border border-grey-200 text-grey-800 font-onest font-medium hover:border-grey-500 transition-colors shadow-card"
               >
                 Как это работает?
                 <Icon name="ArrowRight" size={16} />
@@ -71,8 +71,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
             {stats.map((s, i) => (
               <div key={i} className="glass rounded-2xl px-5 py-4">
-                <div className="font-cormorant font-bold text-blue text-3xl">{s.value}</div>
-                <div className="font-ibm text-grey-500 text-xs mt-0.5">{s.label}</div>
+                <div className="font-syne font-bold text-blue text-3xl">{s.value}</div>
+                <div className="font-onest text-grey-500 text-xs mt-0.5">{s.label}</div>
               </div>
             ))}
           </div>
@@ -84,7 +84,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
             <div className="section-chip mb-4">Процесс</div>
-            <h2 className="font-cormorant font-bold text-grey-900 text-4xl md:text-5xl">
+            <h2 className="font-syne font-bold text-grey-900 text-4xl md:text-5xl">
               Четыре шага до результата
             </h2>
           </div>
@@ -92,14 +92,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {steps.map((step, i) => (
               <div key={i} className="relative bg-grey-50 rounded-2xl p-6 hover-lift">
-                <span className="absolute top-3 right-5 font-cormorant font-bold text-5xl text-grey-200 leading-none pointer-events-none select-none">
+                <span className="absolute top-3 right-5 font-syne font-bold text-5xl text-grey-200 leading-none pointer-events-none select-none">
                   {step.num}
                 </span>
                 <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
                   <Icon name={step.icon} fallback="FileText" size={20} className="text-blue" />
                 </div>
-                <h3 className="font-ibm font-semibold text-grey-900 text-base mb-2">{step.title}</h3>
-                <p className="font-ibm text-grey-500 text-sm leading-relaxed">{step.desc}</p>
+                <h3 className="font-onest font-semibold text-grey-900 text-base mb-2">{step.title}</h3>
+                <p className="font-onest text-grey-500 text-sm leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -111,7 +111,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
             <div className="section-chip gold mb-4">Преимущества</div>
-            <h2 className="font-cormorant font-bold text-grey-900 text-4xl md:text-5xl">
+            <h2 className="font-syne font-bold text-grey-900 text-4xl md:text-5xl">
               Почему выбирают нас
             </h2>
           </div>
@@ -123,8 +123,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   <Icon name={f.icon} fallback="CheckCircle" size={18} className="text-gold" />
                 </div>
                 <div>
-                  <h3 className="font-ibm font-semibold text-grey-900 text-sm mb-1">{f.title}</h3>
-                  <p className="font-ibm text-grey-500 text-sm leading-relaxed">{f.desc}</p>
+                  <h3 className="font-onest font-semibold text-grey-900 text-sm mb-1">{f.title}</h3>
+                  <p className="font-onest text-grey-500 text-sm leading-relaxed">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -138,15 +138,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="bg-blue rounded-3xl px-10 py-14 text-center relative overflow-hidden">
             <div className="absolute inset-0 opacity-10 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 60% 80% at 80% 50%, white 0%, transparent 70%)' }} />
-            <h2 className="font-cormorant font-bold text-white text-4xl md:text-5xl mb-4 relative">
+            <h2 className="font-syne font-bold text-white text-4xl md:text-5xl mb-4 relative">
               Готовы отменить судебный приказ?
             </h2>
-            <p className="font-ibm text-white/70 text-base mb-8 max-w-md mx-auto relative">
+            <p className="font-onest text-white/70 text-base mb-8 max-w-md mx-auto relative">
               Начните прямо сейчас — заявление будет готово через 10 минут
             </p>
             <button
               onClick={() => onNavigate('constructor')}
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gold text-grey-900 font-ibm font-semibold hover:bg-gold-light transition-colors relative shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gold text-grey-900 font-onest font-semibold hover:bg-gold-light transition-colors relative shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
             >
               Начать оформление
               <Icon name="ArrowRight" size={18} />
