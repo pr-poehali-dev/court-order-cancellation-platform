@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import axios from 'axios';
 import Icon from '@/components/ui/icon';
+import func2url from '../../backend/func2url.json';
 
 interface ConstructorPageProps {
   onNavigate: (page: string) => void;
@@ -8,44 +10,29 @@ interface ConstructorPageProps {
 type Step = 'court' | 'claimant' | 'order' | 'grounds' | 'preview';
 
 interface FormData {
-  // Court info
-  courtName: string;
-  courtAddress: string;
-  courtCity: string;
-  // Claimant
-  fullName: string;
-  birthDate: string;
-  address: string;
-  phone: string;
-  email: string;
-  // Order info
-  orderNumber: string;
-  orderDate: string;
-  orderIssued: string;
-  creditorName: string;
-  debtAmount: string;
-  // Grounds
-  groundsType: string;
-  groundsDetails: string;
+  courtName: string; courtAddress: string; courtCity: string;
+  fullName: string; birthDate: string; address: string; phone: string; email: string;
+  orderNumber: string; orderDate: string; orderIssued: string; creditorName: string; debtAmount: string;
+  groundsType: string; groundsDetails: string;
 }
 
-const STEPS: { id: Step; label: string; desc: string }[] = [
-  { id: 'court', label: 'Суд', desc: 'Данные суда' },
-  { id: 'claimant', label: 'Заявитель', desc: 'Ваши данные' },
-  { id: 'order', label: 'Приказ', desc: 'Данные приказа' },
-  { id: 'grounds', label: 'Основания', desc: 'Причины отмены' },
-  { id: 'preview', label: 'Итог', desc: 'Проверка' },
+const STEPS: { id: Step; label: string; icon: string }[] = [
+  { id: 'court',     label: 'Суд',        icon: 'Building2' },
+  { id: 'claimant',  label: 'Заявитель',  icon: 'User' },
+  { id: 'order',     label: 'Приказ',     icon: 'FileText' },
+  { id: 'grounds',   label: 'Основания',  icon: 'MessageSquare' },
+  { id: 'preview',   label: 'Проверка',   icon: 'CheckCircle' },
 ];
 
 const GROUNDS = [
   { value: 'not_notified', label: 'Не был уведомлён о вынесении приказа' },
   { value: 'disagreement', label: 'Не согласен с суммой долга' },
-  { value: 'debt_paid', label: 'Долг уже погашен' },
+  { value: 'debt_paid',    label: 'Долг уже погашен' },
   { value: 'wrong_debtor', label: 'Я не являюсь должником' },
-  { value: 'other', label: 'Иные основания' },
+  { value: 'other',        label: 'Иные основания' },
 ];
 
-const initialForm: FormData = {
+const initial: FormData = {
   courtName: '', courtAddress: '', courtCity: '',
   fullName: '', birthDate: '', address: '', phone: '', email: '',
   orderNumber: '', orderDate: '', orderIssued: '', creditorName: '', debtAmount: '',
@@ -54,326 +41,221 @@ const initialForm: FormData = {
 
 export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
   const [step, setStep] = useState<Step>('court');
-  const [form, setForm] = useState<FormData>(initialForm);
+  const [form, setForm] = useState<FormData>(initial);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState('');
 
   const stepIndex = STEPS.findIndex(s => s.id === step);
+  const upd = (f: keyof FormData, v: string) => setForm(p => ({ ...p, [f]: v }));
 
-  const update = (field: keyof FormData, value: string) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+  const next = () => { if (stepIndex < STEPS.length - 1) setStep(STEPS[stepIndex + 1].id); };
+  const prev = () => { if (stepIndex > 0) setStep(STEPS[stepIndex - 1].id); };
+
+  const downloadPdf = async () => {
+    setPdfLoading(true);
+    setPdfError('');
+    try {
+      const res = await axios.post(func2url['generate-pdf'], form);
+      const { pdf, filename } = res.data;
+      const binary = atob(pdf);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename || 'zayavlenie.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setPdfError('Не удалось сформировать PDF. Проверьте данные и попробуйте снова.');
+    } finally {
+      setPdfLoading(false);
+    }
   };
 
-  const next = () => {
-    const idx = STEPS.findIndex(s => s.id === step);
-    if (idx < STEPS.length - 1) setStep(STEPS[idx + 1].id);
-  };
-
-  const prev = () => {
-    const idx = STEPS.findIndex(s => s.id === step);
-    if (idx > 0) setStep(STEPS[idx - 1].id);
-  };
-
-  const inputClass = "w-full border border-border bg-white px-3 py-2.5 font-ibm text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-navy transition-colors";
-  const labelClass = "block font-ibm text-xs text-muted-foreground uppercase tracking-wider mb-1.5";
+  const inp = "w-full rounded-xl border border-grey-200 bg-grey-50 px-4 py-3 font-ibm text-sm text-foreground placeholder:text-grey-500 focus:outline-none focus:border-blue focus:bg-white transition-all";
+  const lbl = "block font-ibm text-xs font-medium text-grey-500 uppercase tracking-wider mb-1.5";
 
   return (
     <div className="pt-16 min-h-screen bg-background">
-      {/* Top bar */}
-      <div className="bg-navy py-10">
-        <div className="container max-w-4xl mx-auto px-6">
-          <div className="font-ibm text-xs text-gold/70 uppercase tracking-widest mb-2">Конструктор</div>
-          <h1 className="font-cormorant font-bold text-white text-3xl md:text-4xl">
+      {/* Hero bar */}
+      <div className="bg-white border-b border-grey-200">
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <div className="section-chip mb-3">Конструктор</div>
+          <h1 className="font-cormorant font-bold text-grey-900 text-3xl md:text-4xl">
             Заявление об отмене судебного приказа
           </h1>
         </div>
       </div>
 
-      {/* Steps indicator */}
-      <div className="bg-white border-b border-border">
-        <div className="container max-w-4xl mx-auto px-6">
-          <div className="flex overflow-x-auto">
+      {/* Steps */}
+      <div className="bg-white border-b border-grey-200">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="flex overflow-x-auto gap-0">
             {STEPS.map((s, i) => (
               <button
                 key={s.id}
-                onClick={() => i < stepIndex || i === stepIndex ? setStep(s.id) : undefined}
-                className={`flex items-center gap-2 px-4 py-4 border-b-2 transition-colors flex-shrink-0 ${
+                onClick={() => i <= stepIndex ? setStep(s.id) : undefined}
+                className={`flex items-center gap-2 px-4 py-4 border-b-2 transition-all flex-shrink-0 ${
                   s.id === step
-                    ? 'border-gold text-navy'
+                    ? 'border-blue text-blue'
                     : i < stepIndex
-                    ? 'border-transparent text-muted-foreground hover:text-navy cursor-pointer'
-                    : 'border-transparent text-muted-foreground/40 cursor-default'
+                    ? 'border-transparent text-grey-500 hover:text-grey-900 cursor-pointer'
+                    : 'border-transparent text-grey-200 cursor-default'
                 }`}
               >
-                <div className={`w-6 h-6 flex items-center justify-center text-xs font-ibm font-semibold flex-shrink-0 ${
-                  i < stepIndex
-                    ? 'bg-gold text-navy'
-                    : s.id === step
-                    ? 'bg-navy text-white'
-                    : 'bg-border text-muted-foreground'
+                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-ibm font-semibold flex-shrink-0 transition-all ${
+                  i < stepIndex ? 'bg-blue text-white'
+                    : s.id === step ? 'bg-blue-50 text-blue'
+                    : 'bg-grey-100 text-grey-500'
                 }`}>
                   {i < stepIndex ? <Icon name="Check" size={12} /> : i + 1}
                 </div>
-                <div className="text-left hidden sm:block">
-                  <div className="font-ibm text-xs font-semibold">{s.label}</div>
-                  <div className="font-ibm text-xs opacity-60">{s.desc}</div>
-                </div>
+                <span className="font-ibm text-sm hidden sm:block">{s.label}</span>
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Form content */}
-      <div className="container max-w-4xl mx-auto px-6 py-10">
-        <div className="bg-white border border-border p-8 animate-fade-in">
+      <div className="max-w-4xl mx-auto px-6 py-10">
+        <div className="bg-white rounded-2xl shadow-card p-8 animate-fade-in">
 
-          {/* Step: Court */}
           {step === 'court' && (
             <div>
-              <h2 className="font-cormorant font-bold text-navy text-2xl mb-1 decor-line">Данные суда</h2>
-              <p className="font-ibm text-muted-foreground text-sm mb-8 mt-4">
-                Укажите суд, который вынес судебный приказ
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Данные суда</h2>
+              <p className="font-ibm text-grey-500 text-sm mb-8">Укажите суд, который вынес судебный приказ</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
-                  <label className={labelClass}>Наименование суда *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="Мировой судья судебного участка №1 Ленинского района"
-                    value={form.courtName}
-                    onChange={e => update('courtName', e.target.value)}
-                  />
+                  <label className={lbl}>Наименование суда *</label>
+                  <input className={inp} placeholder="Мировой судья судебного участка №1 Ленинского района" value={form.courtName} onChange={e => upd('courtName', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Город/населённый пункт *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="Москва"
-                    value={form.courtCity}
-                    onChange={e => update('courtCity', e.target.value)}
-                  />
+                  <label className={lbl}>Город *</label>
+                  <input className={inp} placeholder="Москва" value={form.courtCity} onChange={e => upd('courtCity', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Адрес суда</label>
-                  <input
-                    className={inputClass}
-                    placeholder="ул. Примерная, д. 1"
-                    value={form.courtAddress}
-                    onChange={e => update('courtAddress', e.target.value)}
-                  />
+                  <label className={lbl}>Адрес суда</label>
+                  <input className={inp} placeholder="ул. Примерная, д. 1" value={form.courtAddress} onChange={e => upd('courtAddress', e.target.value)} />
                 </div>
               </div>
             </div>
           )}
 
-          {/* Step: Claimant */}
           {step === 'claimant' && (
             <div>
-              <h2 className="font-cormorant font-bold text-navy text-2xl mb-1 decor-line">Данные заявителя</h2>
-              <p className="font-ibm text-muted-foreground text-sm mb-8 mt-4">
-                Ваши персональные данные для заявления
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Данные заявителя</h2>
+              <p className="font-ibm text-grey-500 text-sm mb-8">Ваши персональные данные для заявления</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="md:col-span-2">
-                  <label className={labelClass}>ФИО полностью *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="Иванов Иван Иванович"
-                    value={form.fullName}
-                    onChange={e => update('fullName', e.target.value)}
-                  />
+                  <label className={lbl}>ФИО полностью *</label>
+                  <input className={inp} placeholder="Иванов Иван Иванович" value={form.fullName} onChange={e => upd('fullName', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Дата рождения *</label>
-                  <input
-                    type="date"
-                    className={inputClass}
-                    value={form.birthDate}
-                    onChange={e => update('birthDate', e.target.value)}
-                  />
+                  <label className={lbl}>Дата рождения *</label>
+                  <input type="date" className={inp} value={form.birthDate} onChange={e => upd('birthDate', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Телефон *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="+7 (900) 000-00-00"
-                    value={form.phone}
-                    onChange={e => update('phone', e.target.value)}
-                  />
+                  <label className={lbl}>Телефон *</label>
+                  <input className={inp} placeholder="+7 (900) 000-00-00" value={form.phone} onChange={e => upd('phone', e.target.value)} />
                 </div>
                 <div className="md:col-span-2">
-                  <label className={labelClass}>Адрес регистрации *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="г. Москва, ул. Примерная, д. 1, кв. 1"
-                    value={form.address}
-                    onChange={e => update('address', e.target.value)}
-                  />
+                  <label className={lbl}>Адрес регистрации *</label>
+                  <input className={inp} placeholder="г. Москва, ул. Примерная, д. 1, кв. 1" value={form.address} onChange={e => upd('address', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Email</label>
-                  <input
-                    type="email"
-                    className={inputClass}
-                    placeholder="ivanov@mail.ru"
-                    value={form.email}
-                    onChange={e => update('email', e.target.value)}
-                  />
+                  <label className={lbl}>Email</label>
+                  <input type="email" className={inp} placeholder="ivanov@mail.ru" value={form.email} onChange={e => upd('email', e.target.value)} />
                 </div>
               </div>
             </div>
           )}
 
-          {/* Step: Order */}
           {step === 'order' && (
             <div>
-              <h2 className="font-cormorant font-bold text-navy text-2xl mb-1 decor-line">Данные судебного приказа</h2>
-              <p className="font-ibm text-muted-foreground text-sm mb-8 mt-4">
-                Заполните из текста судебного приказа
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Данные судебного приказа</h2>
+              <p className="font-ibm text-grey-500 text-sm mb-8">Заполните из текста судебного приказа</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className={labelClass}>Номер приказа *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="2-1234/2024"
-                    value={form.orderNumber}
-                    onChange={e => update('orderNumber', e.target.value)}
-                  />
+                  <label className={lbl}>Номер приказа *</label>
+                  <input className={inp} placeholder="2-1234/2024" value={form.orderNumber} onChange={e => upd('orderNumber', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Дата вынесения *</label>
-                  <input
-                    type="date"
-                    className={inputClass}
-                    value={form.orderDate}
-                    onChange={e => update('orderDate', e.target.value)}
-                  />
+                  <label className={lbl}>Дата вынесения *</label>
+                  <input type="date" className={inp} value={form.orderDate} onChange={e => upd('orderDate', e.target.value)} />
                 </div>
                 <div className="md:col-span-2">
-                  <label className={labelClass}>Кем выдан (взыскатель) *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="ООО «МФО Пример», ПАО «Банк России»"
-                    value={form.orderIssued}
-                    onChange={e => update('orderIssued', e.target.value)}
-                  />
+                  <label className={lbl}>Взыскатель *</label>
+                  <input className={inp} placeholder="ООО «МФО Пример»" value={form.orderIssued} onChange={e => upd('orderIssued', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Наименование кредитора *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="ООО «МФО Пример»"
-                    value={form.creditorName}
-                    onChange={e => update('creditorName', e.target.value)}
-                  />
+                  <label className={lbl}>Наименование кредитора *</label>
+                  <input className={inp} placeholder="ООО «МФО Пример»" value={form.creditorName} onChange={e => upd('creditorName', e.target.value)} />
                 </div>
                 <div>
-                  <label className={labelClass}>Сумма долга по приказу *</label>
-                  <input
-                    className={inputClass}
-                    placeholder="25 000 рублей"
-                    value={form.debtAmount}
-                    onChange={e => update('debtAmount', e.target.value)}
-                  />
+                  <label className={lbl}>Сумма долга *</label>
+                  <input className={inp} placeholder="25 000 рублей" value={form.debtAmount} onChange={e => upd('debtAmount', e.target.value)} />
                 </div>
               </div>
             </div>
           )}
 
-          {/* Step: Grounds */}
           {step === 'grounds' && (
             <div>
-              <h2 className="font-cormorant font-bold text-navy text-2xl mb-1 decor-line">Основания для отмены</h2>
-              <p className="font-ibm text-muted-foreground text-sm mb-8 mt-4">
-                Укажите причину отмены судебного приказа
-              </p>
-              <div className="space-y-3 mb-6">
+              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Основания для отмены</h2>
+              <p className="font-ibm text-grey-500 text-sm mb-8">Укажите причину отмены судебного приказа</p>
+              <div className="space-y-2.5 mb-6">
                 {GROUNDS.map(g => (
                   <label
                     key={g.value}
-                    className={`flex items-center gap-3 p-4 border cursor-pointer transition-colors ${
+                    className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
                       form.groundsType === g.value
-                        ? 'border-navy bg-navy/5'
-                        : 'border-border hover:border-navy/40'
+                        ? 'border-blue bg-blue-50'
+                        : 'border-grey-200 hover:border-blue/40 hover:bg-grey-50'
                     }`}
                   >
-                    <div className={`w-4 h-4 border-2 flex items-center justify-center flex-shrink-0 ${
-                      form.groundsType === g.value ? 'border-navy' : 'border-border'
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                      form.groundsType === g.value ? 'border-blue' : 'border-grey-200'
                     }`}>
-                      {form.groundsType === g.value && (
-                        <div className="w-2 h-2 bg-navy" />
-                      )}
+                      {form.groundsType === g.value && <div className="w-2.5 h-2.5 rounded-full bg-blue" />}
                     </div>
-                    <input
-                      type="radio"
-                      className="sr-only"
-                      value={g.value}
-                      checked={form.groundsType === g.value}
-                      onChange={() => update('groundsType', g.value)}
-                    />
-                    <span className="font-ibm text-sm text-foreground">{g.label}</span>
+                    <input type="radio" className="sr-only" value={g.value} checked={form.groundsType === g.value} onChange={() => upd('groundsType', g.value)} />
+                    <span className="font-ibm text-sm text-grey-900">{g.label}</span>
                   </label>
                 ))}
               </div>
               <div>
-                <label className={labelClass}>Дополнительные сведения</label>
+                <label className={lbl}>Дополнительные сведения</label>
                 <textarea
-                  className={`${inputClass} resize-none h-28`}
+                  className={`${inp} resize-none h-28`}
                   placeholder="Укажите подробности, которые важны для вашего дела..."
                   value={form.groundsDetails}
-                  onChange={e => update('groundsDetails', e.target.value)}
+                  onChange={e => upd('groundsDetails', e.target.value)}
                 />
               </div>
             </div>
           )}
 
-          {/* Step: Preview */}
           {step === 'preview' && (
             <div>
-              <h2 className="font-cormorant font-bold text-navy text-2xl mb-1 decor-line">Проверьте данные</h2>
-              <p className="font-ibm text-muted-foreground text-sm mb-8 mt-4">
-                Убедитесь в правильности введённых данных перед оплатой
-              </p>
+              <h2 className="font-cormorant font-bold text-grey-900 text-2xl mb-1">Проверьте данные</h2>
+              <p className="font-ibm text-grey-500 text-sm mb-8">Убедитесь в правильности данных перед оплатой</p>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {[
-                  {
-                    title: 'Суд', items: [
-                      ['Наименование', form.courtName],
-                      ['Город', form.courtCity],
-                      ['Адрес', form.courtAddress],
-                    ]
-                  },
-                  {
-                    title: 'Заявитель', items: [
-                      ['ФИО', form.fullName],
-                      ['Дата рождения', form.birthDate],
-                      ['Адрес', form.address],
-                      ['Телефон', form.phone],
-                    ]
-                  },
-                  {
-                    title: 'Судебный приказ', items: [
-                      ['Номер', form.orderNumber],
-                      ['Дата', form.orderDate],
-                      ['Взыскатель', form.orderIssued],
-                      ['Сумма долга', form.debtAmount],
-                    ]
-                  },
-                  {
-                    title: 'Основания', items: [
-                      ['Причина', GROUNDS.find(g => g.value === form.groundsType)?.label || '—'],
-                      ['Детали', form.groundsDetails],
-                    ]
-                  },
-                ].map((section, i) => (
-                  <div key={i} className="border border-border p-5">
-                    <div className="font-cormorant font-bold text-navy text-lg mb-3">{section.title}</div>
+                  { title: 'Суд', items: [['Наименование', form.courtName], ['Город', form.courtCity], ['Адрес', form.courtAddress]] },
+                  { title: 'Заявитель', items: [['ФИО', form.fullName], ['Дата рождения', form.birthDate], ['Адрес', form.address], ['Телефон', form.phone]] },
+                  { title: 'Судебный приказ', items: [['Номер', form.orderNumber], ['Дата', form.orderDate], ['Взыскатель', form.orderIssued], ['Сумма', form.debtAmount]] },
+                  { title: 'Основания', items: [['Причина', GROUNDS.find(g => g.value === form.groundsType)?.label || '—'], ['Детали', form.groundsDetails]] },
+                ].map((sec, i) => (
+                  <div key={i} className="bg-grey-50 rounded-xl p-5">
+                    <div className="font-ibm font-semibold text-grey-900 text-sm mb-3">{sec.title}</div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {section.items.filter(([, v]) => v).map(([k, v]) => (
+                      {sec.items.filter(([, v]) => v).map(([k, v]) => (
                         <div key={k}>
-                          <div className="font-ibm text-xs text-muted-foreground uppercase tracking-wider">{k}</div>
-                          <div className="font-ibm text-sm text-foreground mt-0.5">{v}</div>
+                          <div className="font-ibm text-xs text-grey-500 uppercase tracking-wider">{k}</div>
+                          <div className="font-ibm text-sm text-grey-900 mt-0.5">{v}</div>
                         </div>
                       ))}
                     </div>
@@ -381,24 +263,37 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
                 ))}
               </div>
 
-              <div className="mt-8 p-5 bg-gold/8 border border-gold/25 flex items-start gap-3">
-                <Icon name="Info" size={18} className="text-gold flex-shrink-0 mt-0.5" />
-                <div>
-                  <div className="font-ibm font-semibold text-sm text-navy mb-1">Готово к оплате</div>
-                  <div className="font-ibm text-sm text-muted-foreground">
-                    После оплаты заявление будет сформировано и доступно для скачивания в форматах DOCX и PDF.
+              {/* PDF download */}
+              <div className="mt-6 bg-white rounded-2xl border border-grey-200 p-6">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+                  <div>
+                    <div className="font-ibm font-semibold text-grey-900 text-sm mb-1">Предварительный просмотр</div>
+                    <p className="font-ibm text-sm text-grey-500">Скачайте черновик заявления в PDF для проверки</p>
                   </div>
+                  <button
+                    onClick={downloadPdf}
+                    disabled={pdfLoading}
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-full border border-grey-200 text-grey-800 font-ibm text-sm font-medium hover:border-blue hover:text-blue transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
+                  >
+                    {pdfLoading
+                      ? <><Icon name="Loader" size={16} className="animate-spin" />Генерация...</>
+                      : <><Icon name="FileDown" size={16} />Скачать черновик PDF</>
+                    }
+                  </button>
                 </div>
+                {pdfError && (
+                  <div className="mt-3 p-3 bg-red-50 rounded-xl text-red-600 font-ibm text-xs">{pdfError}</div>
+                )}
               </div>
 
-              <div className="mt-6 flex items-center justify-between border border-border p-5">
+              <div className="mt-4 bg-blue rounded-2xl p-5 flex items-center justify-between">
                 <div>
-                  <div className="font-ibm text-xs text-muted-foreground uppercase tracking-wider">Стоимость</div>
-                  <div className="font-cormorant font-bold text-navy text-3xl mt-1">499 ₽</div>
+                  <div className="font-ibm text-xs text-white/70 uppercase tracking-wider">Стоимость полного тарифа</div>
+                  <div className="font-cormorant font-bold text-white text-4xl mt-1">499 <span className="text-2xl">₽</span></div>
                 </div>
                 <button
                   onClick={() => onNavigate('payment')}
-                  className="bg-gold text-navy font-ibm font-semibold px-8 py-3 hover:bg-gold-light transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-gold text-grey-900 font-ibm font-semibold hover:bg-gold-light transition-colors"
                 >
                   <Icon name="CreditCard" size={18} />
                   Перейти к оплате
@@ -407,12 +302,12 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
             </div>
           )}
 
-          {/* Navigation buttons */}
-          <div className="flex items-center justify-between mt-10 pt-6 border-t border-border">
+          {/* Nav buttons */}
+          <div className="flex items-center justify-between mt-10 pt-6 border-t border-grey-200">
             <button
               onClick={prev}
               disabled={stepIndex === 0}
-              className="flex items-center gap-2 font-ibm text-sm text-muted-foreground hover:text-navy transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-full font-ibm text-sm text-grey-500 hover:bg-grey-100 hover:text-grey-900 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <Icon name="ArrowLeft" size={16} />
               Назад
@@ -420,19 +315,25 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
 
             <div className="flex gap-1.5">
               {STEPS.map((_, i) => (
-                <div key={i} className={`progress-dot ${i <= stepIndex ? 'active' : ''}`} />
+                <div
+                  key={i}
+                  className={`h-1.5 rounded-full transition-all ${
+                    i === stepIndex ? 'w-6 bg-blue' : i < stepIndex ? 'w-3 bg-blue/40' : 'w-3 bg-grey-200'
+                  }`}
+                />
               ))}
             </div>
 
-            {step !== 'preview' ? (
+            {step !== 'preview' && (
               <button
                 onClick={next}
-                className="flex items-center gap-2 bg-navy text-white font-ibm text-sm font-medium px-6 py-2.5 hover:bg-navy-dark transition-colors"
+                className="flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-blue text-white font-ibm text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
               >
                 Далее
                 <Icon name="ArrowRight" size={16} />
               </button>
-            ) : null}
+            )}
+            {step === 'preview' && <div />}
           </div>
         </div>
       </div>

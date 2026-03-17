@@ -7,140 +7,99 @@ interface HomePageProps {
 const stats = [
   { value: '15 000+', label: 'Заявлений создано' },
   { value: '98%', label: 'Принято судами' },
-  { value: '10 мин', label: 'Среднее время заполнения' },
-  { value: '24/7', label: 'Доступность сервиса' },
+  { value: '10 мин', label: 'Среднее время' },
+  { value: '24/7', label: 'Доступность' },
 ];
 
 const steps = [
-  {
-    num: '01',
-    icon: 'FileText',
-    title: 'Заполните форму',
-    desc: 'Введите данные судебного приказа и ваши личные данные в удобном конструкторе.'
-  },
-  {
-    num: '02',
-    icon: 'CreditCard',
-    title: 'Оплатите',
-    desc: 'Безопасная оплата через Stripe или ЮKassa. Стоимость от 499 ₽.'
-  },
-  {
-    num: '03',
-    icon: 'Download',
-    title: 'Скачайте документ',
-    desc: 'Получите готовое заявление в формате DOCX и PDF для подачи в суд.'
-  },
-  {
-    num: '04',
-    icon: 'Send',
-    title: 'Подайте в суд',
-    desc: 'Подайте заявление лично, по почте или через систему ГАС Правосудие.'
-  },
+  { num: '01', icon: 'FileText', title: 'Заполните форму', desc: 'Введите данные приказа и свои личные данные в удобном пошаговом конструкторе.' },
+  { num: '02', icon: 'CreditCard', title: 'Оплатите', desc: 'Безопасная оплата через Stripe или ЮKassa. Стоимость от 499 ₽.' },
+  { num: '03', icon: 'FileDown', title: 'Скачайте PDF', desc: 'Получите готовое юридически верное заявление в формате PDF.' },
+  { num: '04', icon: 'Send', title: 'Подайте в суд', desc: 'Лично, почтой или через ГАС Правосудие.' },
 ];
 
 const features = [
-  { icon: 'Shield', title: 'Юридически верные шаблоны', desc: 'Документы соответствуют требованиям ГПК РФ и АПК РФ' },
-  { icon: 'Zap', title: 'Автоматическое заполнение', desc: 'Форма автоматически подставляет правильные формулировки' },
-  { icon: 'Bell', title: 'Уведомления о статусе', desc: 'SMS и email-уведомления о каждом шаге процесса' },
-  { icon: 'Lock', title: 'Защита данных', desc: 'Все данные зашифрованы и хранятся на защищённых серверах' },
-  { icon: 'FileCheck', title: 'Проверка перед выдачей', desc: 'Автоматическая проверка полноты и корректности документа' },
-  { icon: 'History', title: 'История заявлений', desc: 'Все ваши заявления сохраняются в личном кабинете' },
+  { icon: 'Shield', title: 'Юридически верные шаблоны', desc: 'Соответствует требованиям ГПК РФ и АПК РФ' },
+  { icon: 'Zap', title: 'Автоматическое заполнение', desc: 'Форма подставляет правильные формулировки' },
+  { icon: 'Bell', title: 'Уведомления о статусе', desc: 'SMS и email на каждом шаге' },
+  { icon: 'Lock', title: 'Защита данных', desc: 'Данные зашифрованы, соответствие 152-ФЗ' },
+  { icon: 'FileCheck', title: 'Проверка перед выдачей', desc: 'Автоматическая проверка полноты документа' },
+  { icon: 'History', title: 'История в кабинете', desc: 'Все заявления сохраняются в личном кабинете' },
 ];
 
 export default function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div className="pt-16">
       {/* Hero */}
-      <section className="relative bg-navy overflow-hidden">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `repeating-linear-gradient(
-              0deg,
-              transparent,
-              transparent 60px,
-              rgba(255,255,255,0.3) 60px,
-              rgba(255,255,255,0.3) 61px
-            ), repeating-linear-gradient(
-              90deg,
-              transparent,
-              transparent 60px,
-              rgba(255,255,255,0.3) 60px,
-              rgba(255,255,255,0.3) 61px
-            )`
-          }} />
-        </div>
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/3 to-transparent" />
-
-        <div className="container max-w-6xl mx-auto px-6 py-24 md:py-32 relative">
+      <section className="mesh-bg min-h-[92vh] flex items-center">
+        <div className="max-w-6xl mx-auto px-6 py-24 w-full">
           <div className="max-w-2xl animate-fade-in">
-            <div className="inline-flex items-center gap-2 bg-gold/15 border border-gold/30 px-3 py-1 mb-6">
-              <div className="w-1.5 h-1.5 rounded-full bg-gold" />
-              <span className="font-ibm text-xs text-gold/90 tracking-wider uppercase">
-                Юридический сервис
-              </span>
+            <div className="section-chip mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue inline-block" />
+              Юридический сервис
             </div>
 
-            <h1 className="font-cormorant font-bold text-white text-5xl md:text-6xl lg:text-7xl leading-tight mb-6">
-              Отмена судебного<br />
-              <span className="text-gold italic">приказа</span> — просто
+            <h1 className="font-cormorant font-bold text-grey-900 text-5xl md:text-6xl lg:text-[72px] leading-[1.05] mb-6">
+              Отмените судебный<br />
+              приказ{' '}
+              <span className="text-blue italic">онлайн</span>
             </h1>
 
-            <p className="font-ibm text-white/70 text-base md:text-lg leading-relaxed mb-10 max-w-lg">
-              Заполните форму онлайн, оплатите и получите готовое заявление. Без юристов, без очередей — документ за 10 минут.
+            <p className="font-ibm text-grey-500 text-lg leading-relaxed mb-10 max-w-md">
+              Заполните форму, оплатите и получите готовое заявление. Без юристов и очередей — документ за 10 минут.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={() => onNavigate('constructor')}
-                className="bg-gold text-navy font-ibm font-semibold px-8 py-3.5 hover:bg-gold-light transition-colors flex items-center justify-center gap-2"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-blue text-white font-ibm font-medium shadow-blue hover:bg-blue-dark transition-colors"
               >
                 <Icon name="FileText" size={18} />
                 Создать заявление
               </button>
               <button
                 onClick={() => onNavigate('faq')}
-                className="border border-white/30 text-white font-ibm font-medium px-8 py-3.5 hover:border-white/60 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-white border border-grey-200 text-grey-800 font-ibm font-medium hover:border-grey-500 transition-colors shadow-card"
               >
                 Как это работает?
+                <Icon name="ArrowRight" size={16} />
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Stats bar */}
-        <div className="border-t border-white/10">
-          <div className="container max-w-6xl mx-auto px-6 py-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {stats.map((stat, i) => (
-                <div key={i} className="text-center md:text-left">
-                  <div className="font-cormorant font-bold text-gold text-3xl">{stat.value}</div>
-                  <div className="font-ibm text-white/50 text-xs mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </div>
+          {/* Stats */}
+          <div className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {stats.map((s, i) => (
+              <div key={i} className="glass rounded-2xl px-5 py-4">
+                <div className="font-cormorant font-bold text-blue text-3xl">{s.value}</div>
+                <div className="font-ibm text-grey-500 text-xs mt-0.5">{s.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-20 bg-white">
-        <div className="container max-w-6xl mx-auto px-6">
+      {/* Steps */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
-            <div className="font-ibm text-xs text-gold uppercase tracking-widest mb-3">Процесс</div>
-            <h2 className="font-cormorant font-bold text-navy text-4xl md:text-5xl decor-line-center">
+            <div className="section-chip mb-4">Процесс</div>
+            <h2 className="font-cormorant font-bold text-grey-900 text-4xl md:text-5xl">
               Четыре шага до результата
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {steps.map((step, i) => (
-              <div key={i} className="relative bg-background border border-border p-6 hover-scale">
-                <span className="step-number">{step.num}</span>
-                <div className="w-10 h-10 bg-navy flex items-center justify-center mb-4 relative z-10">
-                  <Icon name={step.icon} fallback="FileText" size={18} className="text-gold" />
+              <div key={i} className="relative bg-grey-50 rounded-2xl p-6 hover-lift">
+                <span className="absolute top-3 right-5 font-cormorant font-bold text-5xl text-grey-200 leading-none pointer-events-none select-none">
+                  {step.num}
+                </span>
+                <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+                  <Icon name={step.icon} fallback="FileText" size={20} className="text-blue" />
                 </div>
-                <h3 className="font-cormorant font-bold text-navy text-xl mb-2">{step.title}</h3>
-                <p className="font-ibm text-muted-foreground text-sm leading-relaxed">{step.desc}</p>
+                <h3 className="font-ibm font-semibold text-grey-900 text-base mb-2">{step.title}</h3>
+                <p className="font-ibm text-grey-500 text-sm leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>
@@ -148,26 +107,24 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {/* Features */}
-      <section className="py-20 bg-secondary">
-        <div className="container max-w-6xl mx-auto px-6">
+      <section className="py-24 bg-background">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14">
-            <div className="font-ibm text-xs text-gold uppercase tracking-widest mb-3">Преимущества</div>
-            <h2 className="font-cormorant font-bold text-navy text-4xl md:text-5xl decor-line-center">
+            <div className="section-chip gold mb-4">Преимущества</div>
+            <h2 className="font-cormorant font-bold text-grey-900 text-4xl md:text-5xl">
               Почему выбирают нас
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {features.map((f, i) => (
-              <div key={i} className="bg-white border border-border p-6 hover-scale group">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 border border-gold/30 flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors">
-                    <Icon name={f.icon} fallback="CheckCircle" size={18} className="text-gold" />
-                  </div>
-                  <div>
-                    <h3 className="font-ibm font-semibold text-navy text-sm mb-1">{f.title}</h3>
-                    <p className="font-ibm text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
-                  </div>
+              <div key={i} className="bg-white rounded-2xl p-6 shadow-card hover-lift flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-gold-50 flex items-center justify-center flex-shrink-0">
+                  <Icon name={f.icon} fallback="CheckCircle" size={18} className="text-gold" />
+                </div>
+                <div>
+                  <h3 className="font-ibm font-semibold text-grey-900 text-sm mb-1">{f.title}</h3>
+                  <p className="font-ibm text-grey-500 text-sm leading-relaxed">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -175,22 +132,26 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="py-16 bg-navy">
-        <div className="container max-w-6xl mx-auto px-6 text-center">
-          <h2 className="font-cormorant font-bold text-white text-4xl md:text-5xl mb-4">
-            Готовы отменить судебный приказ?
-          </h2>
-          <p className="font-ibm text-white/60 text-base mb-8 max-w-md mx-auto">
-            Начните прямо сейчас — заявление будет готово через 10 минут
-          </p>
-          <button
-            onClick={() => onNavigate('constructor')}
-            className="bg-gold text-navy font-ibm font-semibold px-10 py-4 hover:bg-gold-light transition-colors inline-flex items-center gap-2"
-          >
-            <Icon name="ArrowRight" size={18} />
-            Начать оформление
-          </button>
+      {/* CTA */}
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="bg-blue rounded-3xl px-10 py-14 text-center relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 60% 80% at 80% 50%, white 0%, transparent 70%)' }} />
+            <h2 className="font-cormorant font-bold text-white text-4xl md:text-5xl mb-4 relative">
+              Готовы отменить судебный приказ?
+            </h2>
+            <p className="font-ibm text-white/70 text-base mb-8 max-w-md mx-auto relative">
+              Начните прямо сейчас — заявление будет готово через 10 минут
+            </p>
+            <button
+              onClick={() => onNavigate('constructor')}
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-gold text-grey-900 font-ibm font-semibold hover:bg-gold-light transition-colors relative shadow-[0_4px_20px_rgba(0,0,0,0.15)]"
+            >
+              Начать оформление
+              <Icon name="ArrowRight" size={18} />
+            </button>
+          </div>
         </div>
       </section>
     </div>

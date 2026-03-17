@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "name": "Generate PDF - full data",
+      "method": "POST",
+      "path": "/",
+      "body": "{\"courtName\":\"Mirovoy sudya\",\"courtCity\":\"Moskva\",\"courtAddress\":\"ul. Primernaya 1\",\"fullName\":\"Ivanov Ivan Ivanovich\",\"birthDate\":\"01.01.1985\",\"address\":\"Moskva ul Lenina 5\",\"phone\":\"+79001234567\",\"email\":\"test@test.ru\",\"orderNumber\":\"2-1234/2024\",\"orderDate\":\"15.02.2024\",\"orderIssued\":\"OOO MFO Primer\",\"creditorName\":\"OOO MFO Primer\",\"debtAmount\":\"25000 rubley\",\"groundsType\":\"not_notified\",\"groundsDetails\":\"\"}",
+      "expectedStatus": 200,
+      "expectedBody": {},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
