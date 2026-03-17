@@ -24,9 +24,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
           <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center shadow-blue">
             <Icon name="Scale" size={16} className="text-white" />
           </div>
-          <span className="font-cormorant font-bold text-grey-900 text-xl leading-none">
-            ПриказОтмена
-          </span>
+          <span className="font-cormorant font-bold text-grey-900 text-xl leading-none">ЮрДок</span>
         </button>
 
         <nav className="hidden md:flex items-center gap-1">
