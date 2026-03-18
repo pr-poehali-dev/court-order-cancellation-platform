@@ -44,7 +44,7 @@ export default function ContactsPage() {
 
             <div className="bg-white rounded-2xl shadow-card p-5">
               <div className="font-onest font-semibold text-grey-900 text-sm mb-3">ИП Серебренникова Галина Сергеевна</div>
-              {[['ИНН', '7700000000'], ['ОГРН', '1234567890000'], ['КПП', '770000000']].map(([k, v]) => (
+              {[['ИНН', '890500558522'], ['ОГРНИП', '325890000028798']].map(([k, v]) => (
                 <div key={k} className="flex gap-3 mb-1.5 last:mb-0">
                   <span className="font-onest text-xs text-grey-500 w-12">{k}</span>
                   <span className="font-onest text-xs text-grey-900">{v}</span>
