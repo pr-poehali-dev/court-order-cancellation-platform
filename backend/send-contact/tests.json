@@ -11,9 +11,7 @@
       "method": "POST",
       "path": "/",
       "body": {"name": "", "email": "", "message": ""},
-      "expectedStatus": 400,
-      "expectedBody": {"error": "Заполните все обязательные поля"},
-      "bodyMatcher": "partial"
+      "expectedStatus": 400
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Icon from '@/components/ui/icon';
+import func2url from '../../backend/func2url.json';
 
 export default function ContactsPage() {
   const [name, setName] = useState('');
@@ -7,6 +8,8 @@ export default function ContactsPage() {
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const inp = "w-full rounded-xl border border-grey-200 bg-grey-50 px-4 py-3 font-onest text-sm placeholder:text-grey-500 focus:outline-none focus:border-blue focus:bg-white transition-all";
   const lbl = "block font-onest text-xs font-medium text-grey-500 uppercase tracking-wider mb-1.5";
@@ -64,7 +67,24 @@ export default function ContactsPage() {
             ) : (
               <>
                 <h2 className="font-syne font-bold text-grey-900 text-2xl mb-6">Написать нам</h2>
-                <form onSubmit={e => { e.preventDefault(); setSent(true); }} className="space-y-5">
+                <form onSubmit={async e => {
+                  e.preventDefault();
+                  setLoading(true);
+                  setError('');
+                  try {
+                    const res = await fetch(func2url['send-contact'], {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ name, email, subject, message }),
+                    });
+                    if (!res.ok) throw new Error('Ошибка отправки');
+                    setSent(true);
+                  } catch {
+                    setError('Не удалось отправить сообщение. Попробуйте позже.');
+                  } finally {
+                    setLoading(false);
+                  }
+                }} className="space-y-5">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <label className={lbl}>Ваше имя *</label>
@@ -89,9 +109,10 @@ export default function ContactsPage() {
                     <label className={lbl}>Сообщение *</label>
                     <textarea required className={`${inp} resize-none h-36`} placeholder="Опишите ваш вопрос..." value={message} onChange={e => setMessage(e.target.value)} />
                   </div>
-                  <button type="submit" className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-blue text-white font-onest font-medium shadow-blue hover:bg-blue-dark transition-colors">
-                    <Icon name="Send" size={16} />
-                    Отправить сообщение
+                  {error && <p className="font-onest text-sm text-red-500">{error}</p>}
+                  <button type="submit" disabled={loading} className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-blue text-white font-onest font-medium shadow-blue hover:bg-blue-dark transition-colors disabled:opacity-60">
+                    <Icon name={loading ? 'Loader' : 'Send'} size={16} className={loading ? 'animate-spin' : ''} />
+                    {loading ? 'Отправляем...' : 'Отправить сообщение'}
                   </button>
                 </form>
               </>
