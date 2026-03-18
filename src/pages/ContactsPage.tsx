@@ -24,10 +24,9 @@ export default function ContactsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="space-y-5">
             {[
-              { icon: 'Mail',   title: 'Email',          lines: ['support@prikazotmena.ru', 'legal@prikazotmena.ru'] },
-              { icon: 'Phone',  title: 'Телефон',        lines: ['+7 (800) 555-00-00', 'Бесплатно по России'] },
-              { icon: 'Clock',  title: 'Режим работы',   lines: ['Пн–Пт: 9:00 – 19:00', 'Сб: 10:00 – 16:00'] },
-              { icon: 'MapPin', title: 'Юридический адрес', lines: ['127000, г. Москва,', 'ул. Примерная, д. 1'] },
+              { icon: 'Mail',   title: 'Email',        lines: ['telegraf.dbbr@bk.ru'] },
+              { icon: 'Phone',  title: 'Телефон',      lines: ['+7 (800) 555-00-00', 'Бесплатно по России'] },
+              { icon: 'Clock',  title: 'Режим работы', lines: ['Пн–Пт: 9:00 – 19:00', 'Сб: 10:00 – 16:00'] },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-2xl shadow-card p-5 flex items-start gap-4">
                 <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
