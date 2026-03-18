@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Register without pdp_agreed",
+      "method": "POST",
+      "path": "/",
+      "body": {"action": "register", "email": "test@example.com", "password": "123456", "pdp_agreed": false},
+      "expectedStatus": 400
+    },
+    {
+      "name": "Login wrong password",
+      "method": "POST",
+      "path": "/",
+      "body": {"action": "login", "email": "nobody@example.com", "password": "wrongpass"},
+      "expectedStatus": 401
+    }
+  ]
+}

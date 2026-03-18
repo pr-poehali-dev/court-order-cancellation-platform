@@ -4,6 +4,9 @@ import Icon from '@/components/ui/icon';
 interface HeaderProps {
   currentPage: string;
   onNavigate: (page: string) => void;
+  user?: { email: string; full_name: string } | null;
+  onLoginClick?: () => void;
+  onLogout?: () => void;
 }
 
 const navItems = [
@@ -14,7 +17,7 @@ const navItems = [
   { id: 'contacts', label: 'Контакты' },
 ];
 
-export default function Header({ currentPage, onNavigate }: HeaderProps) {
+export default function Header({ currentPage, onNavigate, user, onLoginClick, onLogout }: HeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -44,16 +47,34 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
-          <button
-            onClick={() => onNavigate('cabinet')}
-            className={`px-3.5 py-2 rounded-full font-onest text-sm transition-all ${
-              currentPage === 'cabinet'
-                ? 'bg-blue-50 text-blue font-medium'
-                : 'text-grey-500 hover:text-grey-900 hover:bg-grey-100'
-            }`}
-          >
-            Кабинет
-          </button>
+          {user ? (
+            <>
+              <button
+                onClick={() => onNavigate('cabinet')}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full font-onest text-sm transition-all ${
+                  currentPage === 'cabinet'
+                    ? 'bg-blue-50 text-blue font-medium'
+                    : 'text-grey-500 hover:text-grey-900 hover:bg-grey-100'
+                }`}
+              >
+                <Icon name="User" size={14} />
+                {user.full_name ? user.full_name.split(' ')[0] : user.email}
+              </button>
+              <button
+                onClick={onLogout}
+                className="px-3.5 py-2 rounded-full font-onest text-sm text-grey-500 hover:text-grey-900 hover:bg-grey-100 transition-all"
+              >
+                Выйти
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={onLoginClick}
+              className="px-3.5 py-2 rounded-full font-onest text-sm text-grey-500 hover:text-grey-900 hover:bg-grey-100 transition-all"
+            >
+              Войти
+            </button>
+          )}
           <button
             onClick={() => onNavigate('constructor')}
             className="px-4 py-2 rounded-full bg-blue text-white font-onest text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
