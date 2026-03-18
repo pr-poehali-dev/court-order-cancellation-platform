@@ -37,17 +37,21 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
     setLoading(true);
     setError('');
     try {
+      const formData = localStorage.getItem('constructor_form');
+      const returnUrl = `${window.location.origin}${window.location.pathname}?payment=success&email=${encodeURIComponent(email)}`;
       const res = await fetch(func2url['create-payment'], {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           plan_id: plan,
           email,
-          return_url: window.location.href,
+          return_url: returnUrl,
+          form_data: formData ? JSON.parse(formData) : null,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Ошибка оплаты');
+      localStorage.setItem('pending_payment_id', data.payment_id);
       window.location.href = data.confirmation_url;
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Не удалось создать платёж. Попробуйте позже.');

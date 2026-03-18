@@ -292,7 +292,10 @@ export default function ConstructorPage({ onNavigate }: ConstructorPageProps) {
                   <div className="font-syne font-bold text-white text-4xl mt-1">499 <span className="text-2xl">₽</span></div>
                 </div>
                 <button
-                  onClick={() => onNavigate('payment')}
+                  onClick={() => {
+                    localStorage.setItem('constructor_form', JSON.stringify(form));
+                    onNavigate('payment');
+                  }}
                   className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-gold text-grey-900 font-onest font-semibold hover:bg-gold-light transition-colors"
                 >
                   <Icon name="CreditCard" size={18} />

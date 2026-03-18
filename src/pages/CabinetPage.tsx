@@ -1,23 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Icon from '@/components/ui/icon';
+import func2url from '../../backend/func2url.json';
 
 interface CabinetPageProps {
   onNavigate: (page: string) => void;
   user: { id: string; email: string; full_name: string } | null;
 }
 
-const statusCfg: Record<string, { label: string; cls: string }> = {
-  ready:   { label: 'Готово',      cls: 'bg-emerald-50 text-emerald-700' },
-  pending: { label: 'В обработке', cls: 'bg-amber-50 text-amber-700' },
-  draft:   { label: 'Черновик',    cls: 'bg-grey-100 text-grey-500' },
-};
+interface Doc {
+  id: string;
+  court_name: string;
+  creditor_name: string;
+  debt_amount: string;
+  order_number: string;
+  order_date: string;
+  pdf_sent: boolean;
+  created_at: string;
+}
 
 type Tab = 'documents' | 'profile';
 
 export default function CabinetPage({ onNavigate, user }: CabinetPageProps) {
   const [tab, setTab] = useState<Tab>('documents');
+  const [docs, setDocs] = useState<Doc[]>([]);
+  const [docsLoading, setDocsLoading] = useState(false);
 
   const displayName = user?.full_name || user?.email || '';
+
+  useEffect(() => {
+    if (!user?.email) return;
+    setDocsLoading(true);
+    fetch(func2url['get-documents'], {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_email: user.email }),
+    })
+      .then(r => r.json())
+      .then(data => setDocs(data.documents || []))
+      .finally(() => setDocsLoading(false));
+  }, [user?.email]);
 
   return (
     <div className="pt-16 min-h-screen bg-background">
@@ -74,20 +95,68 @@ export default function CabinetPage({ onNavigate, user }: CabinetPageProps) {
               </button>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-card p-10 text-center">
-              <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
-                <Icon name="FileText" size={28} className="text-blue" />
+            {docsLoading ? (
+              <div className="text-center py-16">
+                <div className="w-8 h-8 border-4 border-blue border-t-transparent rounded-full animate-spin mx-auto" />
               </div>
-              <h3 className="font-syne font-bold text-grey-900 text-xl mb-2">Заявлений пока нет</h3>
-              <p className="font-onest text-sm text-grey-500 mb-6">Создайте первое заявление об отмене судебного приказа</p>
-              <button
-                onClick={() => onNavigate('constructor')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue text-white font-onest text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
-              >
-                <Icon name="Plus" size={16} />
-                Создать заявление
-              </button>
-            </div>
+            ) : docs.length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-card p-10 text-center">
+                <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
+                  <Icon name="FileText" size={28} className="text-blue" />
+                </div>
+                <h3 className="font-syne font-bold text-grey-900 text-xl mb-2">Заявлений пока нет</h3>
+                <p className="font-onest text-sm text-grey-500 mb-6">Создайте первое заявление об отмене судебного приказа</p>
+                <button
+                  onClick={() => onNavigate('constructor')}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-blue text-white font-onest text-sm font-medium shadow-blue hover:bg-blue-dark transition-colors"
+                >
+                  <Icon name="Plus" size={16} />
+                  Создать заявление
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {docs.map(doc => (
+                  <div key={doc.id} className="bg-white rounded-2xl shadow-card p-5 hover-lift">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-start gap-3 flex-1 min-w-0">
+                        <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                          <Icon name="FileText" size={18} className="text-blue" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap mb-1">
+                            <span className="font-onest font-semibold text-grey-900 text-sm">
+                              Заявление об отмене судебного приказа
+                            </span>
+                            <span className={`font-onest text-xs px-2.5 py-0.5 rounded-full ${doc.pdf_sent ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                              {doc.pdf_sent ? 'Отправлено на почту' : 'В обработке'}
+                            </span>
+                          </div>
+                          <p className="font-onest text-xs text-grey-500 truncate">{doc.court_name}</p>
+                          <div className="flex flex-wrap gap-3 mt-1">
+                            {doc.creditor_name && (
+                              <span className="font-onest text-xs text-grey-500">Взыскатель: <span className="text-grey-800">{doc.creditor_name}</span></span>
+                            )}
+                            {doc.debt_amount && (
+                              <span className="font-onest text-xs text-grey-500">Сумма: <span className="text-grey-800">{doc.debt_amount}</span></span>
+                            )}
+                            <span className="font-onest text-xs text-grey-500">{doc.created_at}</span>
+                          </div>
+                        </div>
+                      </div>
+                      {doc.pdf_sent && (
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <span className="font-onest text-xs text-grey-500 flex items-center gap-1.5">
+                            <Icon name="Mail" size={13} className="text-emerald-600" />
+                            Документ отправлен на вашу почту
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
