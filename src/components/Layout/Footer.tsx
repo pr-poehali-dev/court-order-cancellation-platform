@@ -1,3 +1,5 @@
+import Icon from '@/components/ui/icon';
+
 interface FooterProps {
   onNavigate: (page: string) => void;
 }
@@ -29,10 +31,10 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-5">
-              <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center">
-                <span className="text-white font-bold text-sm">П</span>
+              <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center shadow-blue">
+                <Icon name="Scale" size={16} className="text-white" />
               </div>
-              <span className="font-syne font-bold text-white text-xl">ПриказОтмена</span>
+              <span className="font-syne font-bold text-white text-xl leading-none">ЮрДок</span>
             </div>
             <p className="font-onest text-sm text-white/50 leading-relaxed max-w-xs">
               Автоматическое создание заявлений об отмене судебных приказов. Быстро, надёжно, законно.
@@ -43,7 +45,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               </div>
               <div>
                 <div className="font-onest text-xs text-white/35 uppercase tracking-wider">Поддержка</div>
-                <div className="font-onest text-sm text-white/70 mt-0.5">support@prikazotmena.ru</div>
+                <div className="font-onest text-sm text-white/70 mt-0.5">telegraf.dbbr@bk.ru</div>
               </div>
             </div>
           </div>
@@ -68,7 +70,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="font-onest text-xs text-white/30">© 2024 ПриказОтмена. Все права защищены.</p>
+          <p className="font-onest text-xs text-white/30">© 2026 ИП Серебренникова Галина Сергеевна. Все права защищены.</p>
           <p className="font-onest text-xs text-white/30 text-center">
             Шаблоны документов. Не является юридической консультацией.
           </p>
