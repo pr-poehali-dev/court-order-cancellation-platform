@@ -34,7 +34,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               <div className="w-8 h-8 rounded-xl bg-blue flex items-center justify-center shadow-blue">
                 <Icon name="Scale" size={16} className="text-white" />
               </div>
-              <span className="font-syne font-bold text-white text-xl leading-none">ЮрДок</span>
+              <span className="font-syne font-bold text-white text-xl leading-none">ЮрДоки от Даббл</span>
             </div>
             <p className="font-onest text-sm text-white/50 leading-relaxed max-w-xs">
               Автоматическое создание заявлений об отмене судебных приказов. Быстро, надёжно, законно.

@@ -38,12 +38,12 @@ def handler(event: dict, context) -> dict:
     subject_label = subjects_map.get(subject, subject or 'Другое')
 
     msg = MIMEMultipart('alternative')
-    msg['Subject'] = f'[ЮрДок] {subject_label} от {name}'
+    msg['Subject'] = f'[ЮрДоки от Даббл] {subject_label} от {name}'
     msg['From'] = smtp_user
     msg['To'] = to_email
 
     html = f"""
-    <h2>Новое сообщение с сайта ЮрДок</h2>
+    <h2>Новое сообщение с сайта ЮрДоки от Даббл</h2>
     <p><b>Имя:</b> {name}</p>
     <p><b>Email:</b> {email}</p>
     <p><b>Тема:</b> {subject_label}</p>
