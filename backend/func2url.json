@@ -1,4 +1,6 @@
 {
+  "payment-webhook": "https://functions.poehali.dev/f27e3842-f3ea-4ca4-b23a-aac4482f7736",
+  "create-payment": "https://functions.poehali.dev/61dcea72-fa52-4ec7-928f-a80e67401742",
   "send-sample-pdf": "https://functions.poehali.dev/dd34c3d7-2a70-45ba-8c0f-0db2d3db936d",
   "send-contact": "https://functions.poehali.dev/9b601a8a-f315-4a01-84dd-0ade1e1ba0d9",
   "generate-pdf": "https://functions.poehali.dev/c1a223fe-722e-4d6c-aaec-7ad0f0d14660"

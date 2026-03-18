@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Icon from '@/components/ui/icon';
+import func2url from '../../backend/func2url.json';
 
 interface PaymentPageProps {
   onNavigate: (page: string) => void;
@@ -20,27 +21,39 @@ const plans = [
   },
 ];
 
-const methods = [
-  { id: 'card',      label: 'Банковская карта', icon: 'CreditCard', desc: 'Visa, MasterCard, МИР' },
-  { id: 'yookassa', label: 'ЮKassa',           icon: 'Wallet',     desc: 'Электронные кошельки' },
-  { id: 'sbp',       label: 'СБП',              icon: 'Smartphone', desc: 'Быстрые платежи' },
-];
-
-const formatCard = (v: string) => v.replace(/\D/g, '').slice(0, 16).replace(/(\d{4})(?=\d)/g, '$1 ');
-const formatDate = (v: string) => v.replace(/\D/g, '').slice(0, 4).replace(/(\d{2})(?=\d)/, '$1/');
-
 export default function PaymentPage({ onNavigate }: PaymentPageProps) {
   const [plan, setPlan] = useState('standard');
-  const [method, setMethod] = useState('card');
-  const [cardNum, setCardNum] = useState('');
-  const [cardDate, setCardDate] = useState('');
-  const [cardCvv, setCardCvv] = useState('');
-  const [cardName, setCardName] = useState('');
+  const [email, setEmail] = useState('');
   const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const selected = plans.find(p => p.id === plan);
   const inp = "w-full rounded-xl border border-grey-200 bg-grey-50 px-4 py-3 font-onest text-sm placeholder:text-grey-500 focus:outline-none focus:border-blue focus:bg-white transition-all";
   const lbl = "block font-onest text-xs font-medium text-grey-500 uppercase tracking-wider mb-1.5";
+
+  const handlePay = async () => {
+    if (!agreed) return;
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch(func2url['create-payment'], {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan_id: plan,
+          email,
+          return_url: window.location.href,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Ошибка оплаты');
+      window.location.href = data.confirmation_url;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Не удалось создать платёж. Попробуйте позже.');
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="pt-16 min-h-screen bg-background">
@@ -52,7 +65,6 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {/* Plans */}
         <div className="mb-12">
           <h2 className="font-syne font-bold text-grey-900 text-2xl mb-6">Выберите тариф</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -94,59 +106,31 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Form */}
           <div className="lg:col-span-2 bg-white rounded-2xl shadow-card p-8">
-            <h2 className="font-syne font-bold text-grey-900 text-2xl mb-6">Способ оплаты</h2>
+            <h2 className="font-syne font-bold text-grey-900 text-2xl mb-6">Данные для оплаты</h2>
 
-            <div className="grid grid-cols-3 gap-3 mb-8">
-              {methods.map(m => (
-                <button
-                  key={m.id}
-                  onClick={() => setMethod(m.id)}
-                  className={`p-4 rounded-xl border text-center transition-all ${
-                    method === m.id ? 'border-blue bg-blue-50' : 'border-grey-200 hover:border-blue/40'
-                  }`}
-                >
-                  <Icon name={m.icon} fallback="CreditCard" size={22} className={`mx-auto mb-1.5 ${method === m.id ? 'text-blue' : 'text-grey-500'}`} />
-                  <div className={`font-onest text-xs font-semibold ${method === m.id ? 'text-blue' : 'text-grey-900'}`}>{m.label}</div>
-                  <div className="font-onest text-xs text-grey-500 mt-0.5">{m.desc}</div>
-                </button>
-              ))}
+            <div className="space-y-5">
+              <div>
+                <label className={lbl}>Email для квитанции *</label>
+                <input
+                  type="email"
+                  required
+                  className={inp}
+                  placeholder="ivan@mail.ru"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+                <p className="font-onest text-xs text-grey-500 mt-1.5">На этот адрес придёт квитанция и доступ к сервису</p>
+              </div>
+
+              <div className="p-5 bg-blue-50 rounded-xl flex items-start gap-3">
+                <Icon name="ShieldCheck" size={20} className="text-blue flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="font-onest text-sm font-medium text-grey-900 mb-1">Оплата через ЮКассу</div>
+                  <div className="font-onest text-xs text-grey-500">После нажатия «Оплатить» вы перейдёте на защищённую страницу ЮКассы. Принимаем карты Visa, МИР, МастерКард, СБП и электронные кошельки.</div>
+                </div>
+              </div>
             </div>
-
-            {method === 'card' && (
-              <div className="space-y-5">
-                <div>
-                  <label className={lbl}>Номер карты *</label>
-                  <input className={inp} placeholder="0000 0000 0000 0000" value={cardNum} onChange={e => setCardNum(formatCard(e.target.value))} maxLength={19} />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className={lbl}>Срок действия *</label>
-                    <input className={inp} placeholder="ММ/ГГ" value={cardDate} onChange={e => setCardDate(formatDate(e.target.value))} maxLength={5} />
-                  </div>
-                  <div>
-                    <label className={lbl}>CVV *</label>
-                    <input className={inp} placeholder="•••" type="password" value={cardCvv} onChange={e => setCardCvv(e.target.value.replace(/\D/g,'').slice(0,3))} maxLength={3} />
-                  </div>
-                </div>
-                <div>
-                  <label className={lbl}>Имя на карте *</label>
-                  <input className={inp} placeholder="IVAN IVANOV" value={cardName} onChange={e => setCardName(e.target.value.toUpperCase())} />
-                </div>
-              </div>
-            )}
-
-            {method !== 'card' && (
-              <div className="p-8 bg-grey-50 rounded-xl text-center">
-                <Icon name={method === 'sbp' ? 'QrCode' : 'ExternalLink'} fallback="Info" size={28} className="text-grey-500 mx-auto mb-3" />
-                <p className="font-onest text-sm text-grey-500">
-                  {method === 'yookassa'
-                    ? 'После нажатия «Оплатить» вы будете перенаправлены на страницу ЮKassa.'
-                    : 'После нажатия «Оплатить» вам будет показан QR-код для оплаты через СБП.'}
-                </p>
-              </div>
-            )}
 
             <label className="flex items-start gap-3 mt-6 cursor-pointer">
               <button
@@ -165,7 +149,6 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
             </label>
           </div>
 
-          {/* Summary */}
           <div>
             <div className="bg-white rounded-2xl shadow-card p-6 sticky top-24">
               <h3 className="font-syne font-bold text-grey-900 text-xl mb-5">Итог</h3>
@@ -184,16 +167,19 @@ export default function PaymentPage({ onNavigate }: PaymentPageProps) {
                 <span className="font-syne font-bold text-grey-900 text-3xl">{selected?.price.toLocaleString('ru')} ₽</span>
               </div>
 
+              {error && <p className="font-onest text-xs text-red-500 mb-3">{error}</p>}
+
               <button
-                disabled={!agreed}
+                onClick={handlePay}
+                disabled={!agreed || !email || loading}
                 className="w-full py-3.5 rounded-full bg-blue text-white font-onest font-medium shadow-blue hover:bg-blue-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                <Icon name="Lock" size={16} />
-                Оплатить
+                <Icon name={loading ? 'Loader' : 'Lock'} size={16} className={loading ? 'animate-spin' : ''} />
+                {loading ? 'Переходим...' : 'Оплатить'}
               </button>
               <div className="flex items-center justify-center gap-2 mt-4">
                 <Icon name="ShieldCheck" size={13} className="text-grey-500" />
-                <span className="font-onest text-xs text-grey-500">Безопасная оплата</span>
+                <span className="font-onest text-xs text-grey-500">Безопасная оплата через ЮКассу</span>
               </div>
             </div>
           </div>

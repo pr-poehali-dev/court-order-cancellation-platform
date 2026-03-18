@@ -1,0 +1,17 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "Invalid plan",
+      "method": "POST",
+      "path": "/",
+      "body": {"plan_id": "invalid", "email": "test@test.ru", "return_url": "https://example.com"},
+      "expectedStatus": 400
+    }
+  ]
+}
