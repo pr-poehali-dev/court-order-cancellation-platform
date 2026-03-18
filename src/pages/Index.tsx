@@ -53,7 +53,7 @@ export default function Index() {
         {currentPage === 'home' && <HomePage onNavigate={navigate} />}
         {currentPage === 'constructor' && <ConstructorPage onNavigate={navigate} />}
         {currentPage === 'payment' && <PaymentPage onNavigate={navigate} />}
-        {currentPage === 'cabinet' && <CabinetPage onNavigate={navigate} />}
+        {currentPage === 'cabinet' && <CabinetPage onNavigate={navigate} user={user} />}
         {currentPage === 'faq' && <FaqPage />}
         {currentPage === 'contacts' && <ContactsPage />}
         {(currentPage === 'terms' || currentPage === 'privacy') && <TermsPage />}
